@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:renew/common/styling.dart';
-import 'package:renew/screens/timer/providers/notifications_provider.dart';
 import 'package:rive/rive.dart' as rive;
+import './providers/animation_provider.dart';
 
 class MainMenuScreen extends StatefulWidget {
   MainMenuScreen() : super(key: UniqueKey());
@@ -18,8 +18,6 @@ class _MainMenuScreenState extends State<MainMenuScreen>
     with TickerProviderStateMixin {
   @override
   void initState() {
-    // TODO: implement initState
-
     super.initState();
   }
 
@@ -50,6 +48,7 @@ class _MainMenuBodyState extends State<MainMenuBody>
   late rive.Artboard _riveArtboard;
   late rive.RiveAnimationController _riveController;
   final riveFileName = 'assets/bee.riv';
+
   void _loadRiveFile() async {
     await rootBundle.load('assets/bee.riv').then(
       (data) async {
@@ -82,7 +81,7 @@ class _MainMenuBodyState extends State<MainMenuBody>
     _controller.addListener(() {
       this.setState(() {});
     });
-    _loadRiveFile();
+    // _loadRiveFile();
     super.initState();
   }
 
@@ -122,18 +121,29 @@ class _MainMenuBodyState extends State<MainMenuBody>
             ),
           ],
         ),
+        Consumer(
+          builder: (context, watch, child) {
+            return watch(animationProvider).when(
+              data: (value) {
+                return Container(
+                  height: 100,
+                  width: 100,
+                  child: rive.Rive(
+                    artboard: value,
+                    fit: BoxFit.cover,
+                  ),
+                );
+              },
+              loading: () => SizedBox(
+                height: 100,
+              ),
+              error: (_, __) => SizedBox(
+                height: 100,
+              ),
+            );
+          },
+        ),
 
-        if (_riveArtboard == null)
-          const SizedBox()
-        else
-          Container(
-            height: 100,
-            width: 100,
-            child: rive.Rive(
-              artboard: _riveArtboard,
-              fit: BoxFit.cover,
-            ),
-          ),
         SizedBox(
           height: 45,
         ),
