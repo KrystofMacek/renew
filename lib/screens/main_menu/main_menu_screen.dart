@@ -1,9 +1,11 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:renew/common/styling.dart';
 import 'package:renew/screens/timer/providers/notifications_provider.dart';
+import 'package:rive/rive.dart' as rive;
 
 class MainMenuScreen extends StatefulWidget {
   MainMenuScreen() : super(key: UniqueKey());
@@ -45,6 +47,25 @@ class _MainMenuBodyState extends State<MainMenuBody>
   late AnimationController _controller;
   late Animation<Color?> animation;
 
+  late rive.Artboard _riveArtboard;
+  late rive.RiveAnimationController _riveController;
+  final riveFileName = 'assets/bee.riv';
+  void _loadRiveFile() async {
+    await rootBundle.load('assets/bee.riv').then(
+      (data) async {
+        // Load the RiveFile from the binary data.
+        final file = rive.RiveFile.import(data);
+        // The artboard is the root of the animation and gets drawn in the
+        // Rive widget.
+        final artboard = file.mainArtboard;
+        // Add a controller to play back a known animation on the main/default
+        // artboard.We store a reference to it so we can toggle playback.
+        artboard.addController(_riveController = rive.SimpleAnimation('fly'));
+        setState(() => _riveArtboard = artboard);
+      },
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -61,7 +82,7 @@ class _MainMenuBodyState extends State<MainMenuBody>
     _controller.addListener(() {
       this.setState(() {});
     });
-
+    _loadRiveFile();
     super.initState();
   }
 
@@ -73,7 +94,7 @@ class _MainMenuBodyState extends State<MainMenuBody>
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(
-          height: 80,
+          height: 50,
         ),
         // AnimatedDefaultTextStyle(child: child, style: style, duration: duration),
 
@@ -101,8 +122,20 @@ class _MainMenuBodyState extends State<MainMenuBody>
             ),
           ],
         ),
+
+        if (_riveArtboard == null)
+          const SizedBox()
+        else
+          Container(
+            height: 100,
+            width: 100,
+            child: rive.Rive(
+              artboard: _riveArtboard,
+              fit: BoxFit.cover,
+            ),
+          ),
         SizedBox(
-          height: 50,
+          height: 45,
         ),
         Container(
           child: GestureDetector(
