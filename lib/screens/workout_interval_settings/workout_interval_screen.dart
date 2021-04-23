@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:renew/common/providers/ads_provider.dart';
 import 'package:renew/common/styling.dart';
 import 'package:renew/common/utils.dart';
+import 'package:renew/common/widgets/bee_animation.dart';
 import 'package:renew/screens/workout_interval_settings/providers/workout_timer_data.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -37,15 +39,44 @@ class WorkoutIntervalSettingsScreen extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            SizedBox(height: 50),
+            // Consumer(
+            //   builder: (context, watch, child) {
+            //     return watch(adBannerFutureProvider(5)).when(
+            //       data: (value) => value,
+            //       loading: () => SizedBox(
+            //         height: 50,
+            //       ),
+            //       error: (_, __) => SizedBox(
+            //         height: 50,
+            //       ),
+            //     );
+            //   },
+            // ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: IconButton(
+                      iconSize: 30,
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: () => Navigator.pop(context)),
+                ),
+              ],
+            ),
             const SizedBox(
-              height: 80,
+              height: 10,
             ),
             Text(
-              'Timer Settings',
+              'Timer',
               style: _textTheme.headline2,
             ),
             const SizedBox(
-              height: 50,
+              height: 30,
+            ),
+            BeeAnimation(size: 60),
+            const SizedBox(
+              height: 10,
             ),
             Column(
               children: [
@@ -55,7 +86,7 @@ class WorkoutIntervalSettingsScreen extends ConsumerWidget {
                     Column(
                       children: [
                         Text(
-                          'Workout time',
+                          'Workout',
                           style: _textTheme.subtitle1,
                         ),
                         SizedBox(
@@ -106,7 +137,7 @@ class WorkoutIntervalSettingsScreen extends ConsumerWidget {
                     Column(
                       children: [
                         Text(
-                          'Break Time',
+                          'Break',
                           style: _textTheme.subtitle1,
                         ),
                         SizedBox(

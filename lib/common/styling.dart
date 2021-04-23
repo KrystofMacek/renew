@@ -38,6 +38,7 @@ ThemeData getBaseTheme() {
         color: accentColorYellowLight,
         fontSize: 44,
         fontWeight: FontWeight.w200,
+        height: 1.1,
       ),
       headline3: TextStyle(
         fontFamily: 'CourierPrime',

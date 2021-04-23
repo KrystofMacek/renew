@@ -4,6 +4,7 @@ import 'dart:math' as math;
 
 import 'package:renew/common/styling.dart';
 import 'package:renew/common/utils.dart';
+import 'package:renew/common/widgets/bee_animation.dart';
 
 class TimerUI extends StatefulWidget {
   const TimerUI({
@@ -139,10 +140,22 @@ class _TimerUIState extends State<TimerUI> with TickerProviderStateMixin {
             ),
           ),
           Center(
-            child: Text(
-              '${formatDuration(widget._timerDuration)}',
-              style: widget._textTheme.headline3,
-              textAlign: TextAlign.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                BeeAnimation(size: 60),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  '${formatDuration(widget._timerDuration)}',
+                  style: widget._textTheme.headline3,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 35,
+                ),
+              ],
             ),
           ),
 

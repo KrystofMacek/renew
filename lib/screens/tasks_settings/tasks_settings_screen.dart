@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:renew/common/providers/ads_provider.dart';
+import 'package:renew/common/widgets/bee_animation.dart';
 import 'package:renew/data/task.dart';
 import 'package:renew/screens/tasks_settings/providers/tasks_provider.dart';
 
@@ -41,16 +43,42 @@ class TasksSettingsScreen extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              SizedBox(height: 50),
+              // Consumer(
+              //   builder: (context, watch, child) {
+              //     return watch(adBannerFutureProvider(3)).when(
+              //       data: (value) => value,
+              //       loading: () => SizedBox(
+              //         height: 50,
+              //       ),
+              //       error: (_, __) => SizedBox(
+              //         height: 50,
+              //       ),
+              //     );
+              //   },
+              // ),
+              Row(
+                children: [
+                  IconButton(
+                      iconSize: 30,
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: () => Navigator.pop(context)),
+                ],
+              ),
               const SizedBox(
-                height: 80,
+                height: 10,
               ),
               Text(
-                'Break Time Plan',
+                'Renew Time Plan',
                 style: _textTheme.headline2,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
-                height: 50,
+                height: 10,
+              ),
+              BeeAnimation(size: 60),
+              const SizedBox(
+                height: 10,
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 30),

@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:renew/common/providers/ads_provider.dart';
 import 'package:renew/common/styling.dart';
+import 'package:renew/common/widgets/bee_animation.dart';
 import 'package:rive/rive.dart' as rive;
 import './providers/animation_provider.dart';
 
@@ -89,20 +91,23 @@ class _MainMenuBodyState extends State<MainMenuBody>
   Widget build(BuildContext context) {
     final TextTheme _textTheme = Theme.of(context).textTheme;
     final ThemeData _themeData = Theme.of(context);
+    final Size size = MediaQuery.of(context).size;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        SizedBox(
-          height: 50,
-        ),
-        // AnimatedDefaultTextStyle(child: child, style: style, duration: duration),
-
-        // TextLiquidFill(
-        //   text: 'Renew',
-        //   waveColor: accentColorYellow,
-        //   boxBackgroundColor: primaryBlue,
-        //   textStyle: _textTheme.headline1!,
-        //   // boxHeight: 300.0,
+        SizedBox(height: 50),
+        // Consumer(
+        //   builder: (context, watch, child) {
+        //     return watch(adBannerFutureProvider(1)).when(
+        //       data: (value) => value,
+        //       loading: () => SizedBox(
+        //         height: 50,
+        //       ),
+        //       error: (_, __) => SizedBox(
+        //         height: 50,
+        //       ),
+        //     );
+        //   },
         // ),
         AnimatedTextKit(
           isRepeatingAnimation: false,
@@ -121,29 +126,7 @@ class _MainMenuBodyState extends State<MainMenuBody>
             ),
           ],
         ),
-        Consumer(
-          builder: (context, watch, child) {
-            return watch(animationProvider).when(
-              data: (value) {
-                return Container(
-                  height: 100,
-                  width: 100,
-                  child: rive.Rive(
-                    artboard: value,
-                    fit: BoxFit.cover,
-                  ),
-                );
-              },
-              loading: () => SizedBox(
-                height: 100,
-              ),
-              error: (_, __) => SizedBox(
-                height: 100,
-              ),
-            );
-          },
-        ),
-
+        BeeAnimation(size: 120),
         SizedBox(
           height: 45,
         ),
@@ -170,10 +153,8 @@ class _MainMenuBodyState extends State<MainMenuBody>
                 ],
                 borderRadius: BorderRadius.circular(25),
               ),
-              // elevation: 5,
-              // shadowColor: accentColorYellow,
-              // borderRadius: BorderRadius.circular(10),
               child: Container(
+                width: size.width * .8,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                   child: Row(
@@ -188,7 +169,7 @@ class _MainMenuBodyState extends State<MainMenuBody>
                         width: 15,
                       ),
                       Text(
-                        'Interval Timer',
+                        'Focus | Renew',
                         style: _textTheme.button,
                       ),
                     ],
@@ -202,6 +183,7 @@ class _MainMenuBodyState extends State<MainMenuBody>
           height: 30,
         ),
         Container(
+          width: size.width * .8,
           child: GestureDetector(
             onTap: () => Navigator.pushNamed(context, '/workout_interval'),
             child: Container(

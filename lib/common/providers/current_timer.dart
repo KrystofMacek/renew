@@ -121,14 +121,15 @@ class TimerController extends StateNotifier<Duration> {
 
   scheduleNotification(bool isReschedule) {
     // set notification "duration" time into the future.
+
     String title = '';
     String body = '';
     if (currentTimer == CURRENT_TIMER.FOCUS) {
       title = 'Focus Time is Over';
-      body = 'Good Job 👍, you should start you break now.';
+      body = 'Good Job! 👍, time to Renew.';
     } else {
       title = 'Break Time is Over';
-      body = 'Lets get back to work. 🚀🚀🚀';
+      body = 'Are you Renewed? Good, let\'s focus again!. 🚀';
     }
     _notificationProvider.scheduleNotification(
       state,
@@ -162,7 +163,11 @@ class TimerController extends StateNotifier<Duration> {
     int minimizedOnMS = minimezedOn.millisecondsSinceEpoch;
     int diff = currentMS - minimizedOnMS;
 
-    state = Duration(milliseconds: state.inMilliseconds - diff);
+    if (state.inMilliseconds < diff) {
+      state = Duration();
+    } else {
+      state = Duration(milliseconds: state.inMilliseconds - diff);
+    }
   }
 
   Stream<Duration> watchTimerStream() {

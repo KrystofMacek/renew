@@ -39,11 +39,14 @@ class WorkoutTimerController extends StateNotifier<Duration> {
   final AudioCache _audioCache = AudioCache();
   final AudioPlayer _audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
 
+  bool _muted = false;
+
   AudioCache audioCache = AudioCache();
 
-  _playLocal(double volume) async {
+  _playLocal(double volume, String sound) async {
     audioCache.load('sounds/workout.wav');
-    audioCache.play('sounds/workout.wav',
+    audioCache.load('sounds/workout_done.wav');
+    audioCache.play('sounds/$sound.wav',
         mode: PlayerMode.LOW_LATENCY, volume: volume);
   }
 
@@ -58,6 +61,8 @@ class WorkoutTimerController extends StateNotifier<Duration> {
 
   int getBaseSeconds() => _baseSeconds;
   int getSets() => _sets;
+
+  void toggleMute() => _muted = !_muted;
 
   void reset() {
     _baseSeconds =
@@ -106,9 +111,9 @@ class WorkoutTimerController extends StateNotifier<Duration> {
     } else {
       if (state.inSeconds <= 4) {
         if (state.inSeconds == 1) {
-          _playLocal(1);
+          _playLocal(_muted ? 0 : 1, 'workout_done');
         } else {
-          _playLocal(.4);
+          _playLocal(_muted ? 0 : 1, 'workout');
         }
       }
       state = Duration(seconds: state.inSeconds - 1);

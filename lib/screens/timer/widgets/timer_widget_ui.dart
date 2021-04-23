@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:renew/common/constants.dart';
+import 'package:renew/common/providers/ads_provider.dart';
 import 'package:renew/common/providers/current_timer.dart';
 import 'package:renew/common/styling.dart';
 import 'package:renew/common/utils.dart';
@@ -19,7 +20,7 @@ import 'package:renew/screens/timer/widgets/task_list_view.dart';
 import 'package:renew/screens/timer/widgets/timer_controlls.dart';
 import 'dart:math' as math;
 
-class TimerWidget extends StatelessWidget {
+class TimerWidget extends ConsumerWidget {
   const TimerWidget({
     Key? key,
     required TimerController timerController,
@@ -45,13 +46,25 @@ class TimerWidget extends StatelessWidget {
   final bool _isBreak;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ScopedReader watch) {
+    List<Task> _taskList = watch(selectedTaskListProvider.state);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const SizedBox(
-          height: 80,
-        ),
+        SizedBox(height: 50),
+        // Consumer(
+        //   builder: (context, watch, child) {
+        //     return watch(adBannerFutureProvider(4)).when(
+        //       data: (value) => value,
+        //       loading: () => SizedBox(
+        //         height: 50,
+        //       ),
+        //       error: (_, __) => SizedBox(
+        //         height: 50,
+        //       ),
+        //     );
+        //   },
+        // ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -65,7 +78,7 @@ class TimerWidget extends StatelessWidget {
               style: _textTheme.headline2,
               textAlign: TextAlign.center,
             ),
-            _isBreak
+            (_isBreak && _taskList.isNotEmpty)
                 ? Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
@@ -82,16 +95,10 @@ class TimerWidget extends StatelessWidget {
                             barrierDismissible: true,
                             context: context,
                             builder: (context) {
-                              return Consumer(
-                                builder: (context, watch, child) {
-                                  List<Task> _taskList =
-                                      watch(selectedTaskListProvider.state);
-                                  return TaskListView(
-                                    taskList: _taskList,
-                                    textTheme: _textTheme,
-                                    key: key,
-                                  );
-                                },
+                              return TaskListView(
+                                taskList: _taskList,
+                                textTheme: _textTheme,
+                                key: key,
                               );
                             },
                           );

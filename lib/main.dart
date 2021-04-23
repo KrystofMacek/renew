@@ -13,6 +13,8 @@ import 'package:renew/screens/workout_timer/workout_timer.dart';
 import './screens/timer/providers/notifications_provider.dart';
 
 main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await _initHive();
   runApp(
     ProviderScope(
@@ -42,6 +44,7 @@ class _RenewAppState extends State<RenewApp> {
     // TODO: implement initState
     super.initState();
     context.read(notificationProvider).initialize(context);
+    // context.read(adsProvider).initialize();
   }
 
   @override

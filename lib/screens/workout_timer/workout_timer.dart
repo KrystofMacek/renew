@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:renew/common/constants.dart';
+import 'package:renew/common/providers/ads_provider.dart';
 import 'package:renew/common/styling.dart';
 import 'package:renew/common/widgets/timer_widget.dart';
 import 'package:renew/screens/workout_timer/providers/timer_provider.dart';
@@ -88,9 +89,20 @@ class _WorkoutTimerScreenState extends State<WorkoutTimerScreen>
                   if (!_finished) {
                     return Column(
                       children: [
-                        const SizedBox(
-                          height: 80,
-                        ),
+                        SizedBox(height: 50),
+                        // Consumer(
+                        //   builder: (context, watch, child) {
+                        //     return watch(adBannerFutureProvider(6)).when(
+                        //       data: (value) => value,
+                        //       loading: () => SizedBox(
+                        //         height: 50,
+                        //       ),
+                        //       error: (_, __) => SizedBox(
+                        //         height: 50,
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
                         Text(
                           _isBreak ? 'Break' : 'Work',
                           style: _textTheme.headline2,

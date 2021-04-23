@@ -204,9 +204,12 @@ class FocusButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(50),
       color: colorWhiteBlue,
       child: TextButton(
-        child: Text(
-          'Start Focusing',
-          style: Theme.of(context).textTheme.bodyText1,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Text(
+            'Start Focusing',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
         ),
         onPressed: () {
           context.read(timerControllerProvider).resetBaseTimes();
@@ -232,9 +235,12 @@ class BreakButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(50),
       color: colorWhiteBlue,
       child: TextButton(
-        child: Text(
-          'Take a Break',
-          style: Theme.of(context).textTheme.bodyText1,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Text(
+            'Renew',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
         ),
         onPressed: () {
           context.read(timerControllerProvider).resetBaseTimes();
