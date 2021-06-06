@@ -214,6 +214,7 @@ class FocusButton extends StatelessWidget {
         onPressed: () {
           context.read(timerControllerProvider).resetBaseTimes();
           _timerController.startFocus();
+          context.read(timerControllerProvider).resumeTimer();
         },
       ),
     );
@@ -245,6 +246,7 @@ class BreakButton extends StatelessWidget {
         onPressed: () {
           context.read(timerControllerProvider).resetBaseTimes();
           _timerController.startBreak();
+          context.read(timerControllerProvider).resumeTimer();
         },
       ),
     );

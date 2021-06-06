@@ -2,12 +2,10 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:renew/common/providers/ads_provider.dart';
+import 'package:native_admob_flutter/native_admob_flutter.dart';
 import 'package:renew/common/styling.dart';
 import 'package:renew/common/widgets/bee_animation.dart';
 import 'package:rive/rive.dart' as rive;
-import './providers/animation_provider.dart';
 
 class MainMenuScreen extends StatefulWidget {
   MainMenuScreen() : super(key: UniqueKey());
@@ -25,9 +23,15 @@ class _MainMenuScreenState extends State<MainMenuScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: MainMenuBody(),
+    return Container(
+      color: primaryBlue,
+      child: SafeArea(
+        bottom: false,
+        child: Scaffold(
+          body: Center(
+            child: MainMenuBody(),
+          ),
+        ),
       ),
     );
   }
@@ -95,7 +99,12 @@ class _MainMenuBodyState extends State<MainMenuBody>
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        SizedBox(height: 50),
+        NativeAd(
+          buildLayout: adBannerLayoutBuilder,
+          loading: SizedBox(height: 50),
+          error: SizedBox(height: 50),
+          height: 50,
+        ),
         // Consumer(
         //   builder: (context, watch, child) {
         //     return watch(adBannerFutureProvider(1)).when(

@@ -156,18 +156,22 @@ class TimerController extends StateNotifier<Duration> {
   moveToBackground() {
     minimezedOn = DateTime.now();
     print('minized $minimezedOn');
+    print('minized timer $state');
   }
 
   moveToForeground() {
+    print('maximized ${DateTime.now()}');
     int currentMS = DateTime.now().millisecondsSinceEpoch;
+    print('current MS = $currentMS');
     int minimizedOnMS = minimezedOn.millisecondsSinceEpoch;
+    print('minimizedOn MS = $minimizedOnMS');
     int diff = currentMS - minimizedOnMS;
 
-    if (state.inMilliseconds < diff) {
-      state = Duration();
-    } else {
-      state = Duration(milliseconds: state.inMilliseconds - diff);
-    }
+    print('diff MS = $diff');
+
+    Duration updatedTimer = Duration(milliseconds: state.inMilliseconds);
+    print('updatedTimer = $updatedTimer');
+    // state = updatedTimer;
   }
 
   Stream<Duration> watchTimerStream() {

@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:native_admob_flutter/native_admob_flutter.dart';
 import 'package:renew/common/styling.dart';
 import 'package:renew/data/task.dart';
 import 'package:renew/screens/interval_settings/interval_settings_screen.dart';
@@ -14,8 +16,11 @@ import './screens/timer/providers/notifications_provider.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await _initHive();
+
+  MobileAds.initialize(
+    bannerAdUnitId: bannerAdUnitId,
+  );
   runApp(
     ProviderScope(
       child: RenewApp(
@@ -23,6 +28,13 @@ main() async {
       ),
     ),
   );
+}
+
+String get bannerAdUnitId {
+  /// Always test with test ads
+  return MobileAds.bannerAdTestUnitId;
+
+  // return 'you-banner-ad-unit-id';
 }
 
 _initHive() async {

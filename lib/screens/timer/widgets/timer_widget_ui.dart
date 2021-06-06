@@ -5,6 +5,7 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:native_admob_flutter/native_admob_flutter.dart';
 import 'package:renew/common/constants.dart';
 import 'package:renew/common/providers/ads_provider.dart';
 import 'package:renew/common/providers/current_timer.dart';
@@ -51,7 +52,15 @@ class TimerWidget extends ConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        SizedBox(height: 50),
+        NativeAd(
+          buildLayout: adBannerLayoutBuilder,
+          loading: SizedBox(height: 50),
+          error: SizedBox(height: 50),
+          height: 50,
+        ),
+        SizedBox(
+          height: 10,
+        ),
         // Consumer(
         //   builder: (context, watch, child) {
         //     return watch(adBannerFutureProvider(4)).when(
@@ -69,7 +78,7 @@ class TimerWidget extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(
-              width: 40,
+              width: 30,
             ),
             Text(
               _timerController.getTimerType() == CURRENT_TIMER.FOCUS

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,12 +40,16 @@ class WorkoutTimerController extends StateNotifier<Duration> {
 
   bool _muted = false;
 
-  AudioCache audioCache = AudioCache();
-
   _playLocal(double volume, String sound) async {
-    audioCache.load('sounds/workout.wav');
-    audioCache.load('sounds/workout_done.wav');
-    audioCache.play('sounds/$sound.wav',
+    _audioCache.load('sounds/workout.wav');
+    _audioCache.load('sounds/workout_done.wav');
+    _audioCache.play('sounds/$sound.wav',
+        mode: PlayerMode.LOW_LATENCY, volume: volume);
+  }
+
+  _playWorkoutSound(double volume) async {
+    _audioCache.load('sounds/workout_end.wav');
+    _audioCache.play('sounds/workout_end.wav',
         mode: PlayerMode.LOW_LATENCY, volume: volume);
   }
 
@@ -109,12 +112,13 @@ class WorkoutTimerController extends StateNotifier<Duration> {
     if (state.inSeconds == 0 && _sets != 0) {
       _toggleType();
     } else {
-      if (state.inSeconds <= 4) {
-        if (state.inSeconds == 1) {
-          _playLocal(_muted ? 0 : 1, 'workout_done');
-        } else {
-          _playLocal(_muted ? 0 : 1, 'workout');
-        }
+      if (state.inSeconds == 4) {
+        // if (state.inSeconds == 1) {
+        //   _playLocal(_muted ? 0 : 1, 'workout_done');
+        // } else {
+        //   _playLocal(_muted ? 0 : 1, 'workout');
+        // }
+        _playWorkoutSound(_muted ? 0 : 1);
       }
       state = Duration(seconds: state.inSeconds - 1);
     }
@@ -127,11 +131,18 @@ class WorkoutTimerController extends StateNotifier<Duration> {
   }
 
   moveToForeground() {
+    print('maximized ${DateTime.now()}');
     int currentMS = DateTime.now().millisecondsSinceEpoch;
+    print('current MS = $currentMS');
     int minimizedOnMS = minimezedOn.millisecondsSinceEpoch;
+    print('minimizedOn MS = $minimizedOnMS');
     int diff = currentMS - minimizedOnMS;
 
-    state = Duration(milliseconds: state.inMilliseconds - diff);
+    print('diff MS = $diff');
+
+    Duration updatedTimer = Duration(milliseconds: state.inMilliseconds - diff);
+    print('updatedTimer = $updatedTimer');
+    state = updatedTimer;
   }
 
   Stream<Duration> watchTimerStream() {

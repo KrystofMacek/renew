@@ -54,66 +54,74 @@ class _TimerScreenState extends State<TimerScreen>
     double size = MediaQuery.of(context).size.width * .8;
     double breakSize = size * .8;
 
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // save task list as last config
-          Navigator.of(context).popUntil((route) => route.isFirst);
-          context.read(timerControllerProvider).reset();
-          context.read(timerControllerProvider).resetBaseTimes();
+    return Container(
+      color: primaryBlue,
+      child: SafeArea(
+        bottom: false,
+        child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              // save task list as last config
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              context.read(timerControllerProvider).reset();
+              context.read(timerControllerProvider).resetBaseTimes();
 
-          context.read(selectedTaskListProvider).clear();
-        },
-        child: Icon(
-          Icons.close,
-          size: 30,
-          color: _themeData.iconTheme.color,
+              context.read(selectedTaskListProvider).clear();
+            },
+            child: Icon(
+              Icons.close,
+              size: 30,
+              color: _themeData.iconTheme.color,
+            ),
+          ),
+          body: Consumer(
+            builder: (context, watch, child) {
+              TimerController _timerController = watch(timerControllerProvider);
+
+              return Center(
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: watch(timerDurationStream).when(
+                      data: (timerDuration) {
+                        int breakSeconds = _timerController.baseBreakSeconds;
+                        int focusSeconds = _timerController.baseFocusSeconds;
+
+                        bool _isBreak = _timerController.getTimerType() ==
+                            CURRENT_TIMER.BREAK;
+
+                        double timerValue;
+
+                        if (!_isBreak) {
+                          timerValue =
+                              (focusSeconds - timerDuration.inSeconds) /
+                                  focusSeconds;
+                        } else {
+                          timerValue =
+                              (breakSeconds - timerDuration.inSeconds) /
+                                  breakSeconds;
+                        }
+
+                        return TimerWidget(
+                          timerController: _timerController,
+                          textTheme: _textTheme,
+                          size: size,
+                          timerValue: timerValue,
+                          animationController: _animationController,
+                          timerDuration: timerDuration,
+                          isBreak: _isBreak,
+                        );
+                      },
+                      loading: () => SpinKitFadingCube(
+                        color: accentColorYellow,
+                      ),
+                      error: (error, stackTrace) {
+                        return Text('$error');
+                      },
+                    )),
+              );
+            },
+          ),
         ),
-      ),
-      body: Consumer(
-        builder: (context, watch, child) {
-          TimerController _timerController = watch(timerControllerProvider);
-
-          return Center(
-            child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: watch(timerDurationStream).when(
-                  data: (timerDuration) {
-                    int breakSeconds = _timerController.baseBreakSeconds;
-                    int focusSeconds = _timerController.baseFocusSeconds;
-
-                    bool _isBreak =
-                        _timerController.getTimerType() == CURRENT_TIMER.BREAK;
-
-                    double timerValue;
-
-                    if (!_isBreak) {
-                      timerValue = (focusSeconds - timerDuration.inSeconds) /
-                          focusSeconds;
-                    } else {
-                      timerValue = (breakSeconds - timerDuration.inSeconds) /
-                          breakSeconds;
-                    }
-
-                    return TimerWidget(
-                      timerController: _timerController,
-                      textTheme: _textTheme,
-                      size: size,
-                      timerValue: timerValue,
-                      animationController: _animationController,
-                      timerDuration: timerDuration,
-                      isBreak: _isBreak,
-                    );
-                  },
-                  loading: () => SpinKitFadingCube(
-                    color: accentColorYellow,
-                  ),
-                  error: (error, stackTrace) {
-                    return Text('$error');
-                  },
-                )),
-          );
-        },
       ),
     );
   }
